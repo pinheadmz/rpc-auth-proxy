@@ -1,6 +1,6 @@
 import argparse
+import datetime
 import json
-import logging
 import os
 import requests
 import subprocess
@@ -32,7 +32,9 @@ RPC_PORTS = {
 PASSWORD_FILE_PATH = password_file_path()
 
 app = Flask(__name__)
-logging.basicConfig(format="%(message)s")
+
+def log(message):
+    print(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] {message}")
 
 # Function to validate credentials
 def validate_credentials(username, password):
@@ -55,7 +57,7 @@ def endpoint(endpoint):
 def handle_request(endpoint):
     auth = request.authorization
     if not auth or not validate_credentials(auth.username, auth.password):
-        app.logger.info(f" Failed auth by: {auth.username}")
+        log(f"Failed auth by: {auth.username}")
         return make_response('Could not verify login!', 401, {'WWW-Authenticate' : 'Basic realm="Login Required"'})
 
     # Parse the JSON RPC request
@@ -64,11 +66,11 @@ def handle_request(endpoint):
     if isinstance(rpc_request, list):
         for call in rpc_request:
             if call["method"] in DISALLOWED_METHODS:
-                app.logger.info(f" Unauthorized method by {auth.username}: {call['method']}")
+                log(f"Unauthorized method by {auth.username}: {call['method']}")
                 return jsonify({"error": "Method not allowed"}), 403
     else:
         if rpc_request["method"] in DISALLOWED_METHODS:
-            app.logger.info(f" Unauthorized method by {auth.username}: {rpc_request['method']}")
+            log(f"Unauthorized method by {auth.username}: {rpc_request['method']}")
             return jsonify({"error": "Method not allowed"}), 403
 
     # Construct the URL for the local RPC server with the same endpoint
@@ -76,8 +78,7 @@ def handle_request(endpoint):
 
     # Forward the request to the local JSON RPC server
     response = requests.post(local_rpc_url, json=rpc_request)
-    app.logger.info(f" Request by {auth.username} ({response.status_code}):")
-    app.logger.info(f" {rpc_request}")
+    log(f"Request by {auth.username} ({response.status_code}): {rpc_request}")
 
     return jsonify(response.json())
 
