@@ -1,7 +1,9 @@
-import logging
-import json
-import requests
 import argparse
+import json
+import logging
+import os
+import requests
+import subprocess
 
 from flask import Flask, request, jsonify, make_response
 from werkzeug.security import check_password_hash
@@ -27,15 +29,6 @@ RPC_PORTS = {
     "regtest":  [18443, 18440]
 }
 
-# Parse command line arguments for the network (port number)
-parser = argparse.ArgumentParser(description="Run a JSON-RPC proxy server.")
-parser.add_argument("-n", "--network", type=str, help="Which Bitcoin network to proxy to")
-args = parser.parse_args()
-if args.network not in RPC_PORTS:
-    raise Exception("Unknown network")
-
-LISTEN_PORT = RPC_PORTS[args.network][0]
-LOCAL_PORT = RPC_PORTS[args.network][1]
 PASSWORD_FILE_PATH = password_file_path()
 
 app = Flask(__name__)
@@ -79,7 +72,7 @@ def handle_request(endpoint):
             return jsonify({"error": "Method not allowed"}), 403
 
     # Construct the URL for the local RPC server with the same endpoint
-    local_rpc_url = f"http://:{LOCAL_RPC_PASSWORD}@localhost:{LOCAL_PORT}/{endpoint}"
+    local_rpc_url = f"http://:{LOCAL_RPC_PASSWORD}@localhost:{os.environ['LOCAL_PORT']}/{endpoint}"
 
     # Forward the request to the local JSON RPC server
     response = requests.post(local_rpc_url, json=rpc_request)
@@ -89,4 +82,19 @@ def handle_request(endpoint):
     return jsonify(response.json())
 
 if __name__ == '__main__':
-    app.run(port=LISTEN_PORT, host="0.0.0.0", debug=True)
+    # Parse command line arguments for the network (port number)
+    parser = argparse.ArgumentParser(description="Run a JSON-RPC proxy server.")
+    parser.add_argument("network", type=str, help="Which Bitcoin network to proxy to")
+    args = parser.parse_args()
+    if args.network not in RPC_PORTS:
+        raise Exception("Unknown network")
+
+    subprocess.run(
+        [
+            "gunicorn",
+            "-w", "4",
+            f"-b :{RPC_PORTS[args.network][0]}",
+            "server:app"
+        ],
+        env={**os.environ, "LOCAL_PORT": f"{RPC_PORTS[args.network][1]}"},
+        cwd=os.path.dirname(os.path.realpath(__file__)))
