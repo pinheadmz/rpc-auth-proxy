@@ -94,6 +94,7 @@ if __name__ == '__main__':
         [
             "gunicorn",
             "-w", "4",
+            "--timeout", "600",
             f"-b :{RPC_PORTS[args.network][0]}",
             "server:app"
         ],
