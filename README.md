@@ -18,10 +18,11 @@ with bitcoin-cli.
 
 Networks supported: `main`, `testnet`, `signet`, `regtest`
 
-- Start Bitcoin Core: `bitcoind -conf=/path/to/repo/rpc-auth-proxy/etc/bitcoin.conf`
+- Start Bitcoin Core: `bitcoind -daemon -conf=/path/to/repo/rpc-auth-proxy/etc/bitcoin.conf`
   - Optionally add `-signet`, etc for different network
 - Start proxy server: `python src/server.py main`
   - Optionally replace `main` with `signet`, etc.
+  - Use `tmux` to ensure that server don't be killed when exists from terminal.
 
 ## Adding Users
 
