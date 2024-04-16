@@ -5,8 +5,9 @@ and bitcoin-cli RPC usage, without requiring students to sync the node themselve
 
 ## Install
 
-1. clone repo
-2. `pip install -r requirements.txt`
+1. Clone repo
+2. Create and active a Python Virtual Environment
+3. `pip install -r requirements.txt`
 
 ## Run
 
