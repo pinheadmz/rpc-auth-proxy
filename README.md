@@ -22,7 +22,7 @@ Networks supported: `main`, `testnet`, `signet`, `regtest`
   - Optionally add `-signet`, etc for different network
 - Start proxy server: `python src/server.py main`
   - Optionally replace `main` with `signet`, etc.
-  - Use `tmux` to ensure that server don't be killed when exists from terminal.
+  - Use `nohup` or `tmux` to ensure that server don't be killed when exists from terminal or session.
 
 ## Adding Users
 
