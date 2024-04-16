@@ -42,7 +42,7 @@ default in a JSON file at `~/.rpc-auth-proxy-passwords.json`, but another file i
 ```sh
 ~/rpc-auth-proxy$python3 src/bulk_users.py 100
 100 users and passwords have been generated and saved to users_pass.csv.
-100 users and passwords have been added to /home/ubuntu/.rpc-auth-proxy-passwords.json.
+100 users and passwords have been added to ~/.rpc-auth-proxy-passwords.json.
 ```
 
 ## Remote Access
