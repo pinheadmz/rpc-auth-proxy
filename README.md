@@ -20,7 +20,7 @@ Networks supported: `main`, `testnet`, `signet`, `regtest`
 
 - Start Bitcoin Core: `bitcoind -daemon -conf=/path/to/repo/rpc-auth-proxy/etc/bitcoin.conf`
   - Optionally add `-signet`, etc for different network
-- Start proxy server: `python3 src/server.py main`
+- Start proxy server: `python src/server.py main`
   - Optionally replace `main` with `signet`, etc.
   - Use `nohup` or `tmux` to ensure that server don't be killed when exists from terminal or session.
 
@@ -31,9 +31,9 @@ default in a JSON file at `~/.rpc-auth-proxy-passwords.json`. Provide a password
 with `-p` or the script will generate one for you:
 
 ```sh
-~/rpc-auth-proxy$ python3 src/users.py newuser1
+~/rpc-auth-proxy$ python src/users.py newuser1
 Password for newuser1: lYDk7mbTiN60
-~/rpc-auth-proxy$ python3 src/users.py newuser2 -p hunter2
+~/rpc-auth-proxy$ python src/users.py newuser2 -p hunter2
 Password for newuser2: hunter2
 ```
 ### Large amount of Users ###
