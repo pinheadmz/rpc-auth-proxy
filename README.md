@@ -37,7 +37,7 @@ Password for newuser1: lYDk7mbTiN60
 Password for newuser2: hunter2
 ```
 ### Large amount of Users ###
-Another utility that you can use for adding large amount of users it's `src/bulk_users.py`. Hashed passwords are saved by
+To add large amount of users a utility is provided in `src/bulk_users.py`. Hashed passwords are saved by
 default in a JSON file at `~/.rpc-auth-proxy-passwords.json`, but another file is saved too with the pair of username and clear password.
 
 ```sh
