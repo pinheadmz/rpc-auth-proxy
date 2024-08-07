@@ -41,7 +41,7 @@ To add large amount of users a utility is provided in `src/bulk_users.py`. Hashe
 default in a JSON file at `~/.rpc-auth-proxy-passwords.json`, but another file is saved too with the pair of username and clear password.
 
 ```sh
-~/rpc-auth-proxy$python src/bulk_users.py 100
+~/rpc-auth-proxy$ python src/bulk_users.py 100
 100 users and passwords have been generated and saved to users_pass.csv.
 100 users and passwords have been added to ~/.rpc-auth-proxy-passwords.json.
 ```
